@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI创客营 · 周级时间轴（阶段外层级 + 周内层级）</title>
+<style>
+:root{
+  --bg:#0f0f0f;
+  --card:#1f1f1f;
+  --card2:#202626;
+  --line:#333;
+  --text:#e6e6e6;
+  --muted:#9aa4ad;
+  --accent:#00A896;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:linear-gradient(180deg,#0c0c0c,var(--bg));
+  font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  color:var(--text);
+}
+.wrapper{
+  max-width:1200px;
+  margin:40px auto;
+  padding:0 20px;
+}
+h1{
+  font-size:28px;
+  font-weight:900;
+  margin:0 0 10px;
+}
+.subtitle{
+  color:var(--muted);
+  margin:0 0 18px;
+  font-size:14px;
+  line-height:1.65;
+}
+.meta{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin:0 0 26px;
+}
+.pill{
+  font-size:12px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.03);
+  color:#cfd6dc;
+}
+.pill strong{ color:var(--accent); }
+
+/* === Stage timeline (outer level) === */
+.timeline{
+  position:relative;
+  padding-left:28px;
+}
+.timeline::before{
+  content:"";
+  position:absolute;
+  left:6px;
+  top:0;
+  bottom:0;
+  width:2px;
+  background:linear-gradient(var(--accent),transparent 88%);
+}
+
+.stage{
+  position:relative;
+  margin:0 0 18px;
+}
+.stage::before{
+  content:"";
+  position:absolute;
+  left:-2px;
+  top:14px;
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:var(--accent);
+}
+
+.stage-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px 18px;
+}
+
+.header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:8px;
+}
+.tag{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size:12px;
+  padding:4px 10px;
+  border-radius:10px;
+  background:rgba(0,168,150,.15);
+  color:var(--accent);
+  font-weight:800;
+}
+.date{
+  font-size:12px;
+  color:var(--muted);
+  padding:4px 10px;
+  border-radius:10px;
+  border:1px dashed rgba(154,164,173,.35);
+}
+.title{
+  font-size:16px;
+  font-weight:900;
+  margin:2px 0 6px;
+}
+.desc{
+  font-size:13px;
+  color:#cfd6dc;
+  line-height:1.65;
+  margin:0;
+}
+.kv{
+  display:grid;
+  grid-template-columns: 110px 1fr;
+  gap:8px 12px;
+  margin-top:10px;
+  padding-top:10px;
+  border-top:1px dashed rgba(154,164,173,.25);
+}
+.k{ color:var(--muted); font-size:12px; }
+.v{ color:#d9e1e7; font-size:12px; line-height:1.6; }
+
+/* === Nested weeks (inner level) === */
+.subweeks{
+  margin-top:12px;
+  margin-left:14px;            /* indent under stage */
+  padding-left:18px;
+  position:relative;
+}
+.subweeks::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:6px;
+  bottom:6px;
+  width:2px;
+  background:rgba(0,168,150,.30);
+  border-radius:2px;
+}
+.subweek{
+  position:relative;
+  margin:0 0 10px;
+}
+.subweek::before{
+  content:"";
+  position:absolute;
+  left:-7px;
+  top:14px;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:rgba(0,168,150,.45);
+  border:1px solid rgba(0,168,150,.55);
+}
+.subcard{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:12px;
+  padding:12px 14px;
+}
+.subhead{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:6px;
+}
+.subtag{
+  font-size:12px;
+  font-weight:900;
+  color:#cfeee9;
+}
+.subdate{
+  font-size:12px;
+  color:rgba(154,164,173,.9);
+}
+.subtitle2{
+  font-size:13px;
+  font-weight:900;
+  margin:0 0 4px;
+}
+.subdesc{
+  font-size:12px;
+  color:#cfd6dc;
+  line-height:1.6;
+  margin:0;
+}
+.subkv{
+  margin-top:8px;
+  padding-top:8px;
+  border-top:1px dashed rgba(154,164,173,.22);
+  display:grid;
+  grid-template-columns: 78px 1fr;
+  gap:6px 10px;
+}
+.small{ font-size:11px; color:rgba(233,233,233,.65); }
+
+hr.sep{
+  border:none;
+  border-top:1px solid rgba(255,255,255,.06);
+  margin:22px 0 18px;
+}
+</style>
+</head>
+
+<body>
+<div class="wrapper">
+  <h1>AI 创客营 · 周级时间轴（银发经济项目示例）</h1>
+  <p class="subtitle">
+    结构说明：<strong style="color:var(--accent);">阶段是外层级</strong>；当阶段跨多周（阶段四/五），则以<strong style="color:var(--accent);">子周节点</strong>呈现在阶段内部，便于家长理解推进节奏。
+  </p>
+  <div class="meta">
+    <div class="pill"><strong>平日</strong> 2–3 小时</div>
+    <div class="pill"><strong>周末</strong> 5–6 小时</div>
+    <div class="pill"><strong>节假日</strong> 可参与，不冲刺</div>
+  </div>
+
+  <div class="timeline">
+
+    <!-- Pre-training -->
+    <div class="stage">
+      <div class="stage-card">
+        <div class="header">
+          <div class="tag">项目前集训</div>
+          <div class="date">2026.02.01 – 02.06</div>
+        </div>
+        <div class="title">AI 创造营（AI能力底座）</div>
+        <p class="desc">统一AI使用能力与创作方法：文本/图像/视频/基础智能体；体验 vibe coding；完成 ≥1 个作品并能讲清楚。</p>
+        <div class="kv">
+          <div class="k">完成标准</div><div class="v">能独立完成AI作品，并清晰讲述“做了什么、解决了什么问题”。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 1 -->
+    <div class="stage">
+      <div class="stage-card">
+        <div class="header">
+          <div class="tag">阶段一</div>
+          <div class="date">Week 1｜2026.02.07 – 02.13</div>
+        </div>
+        <div class="title">项目启动与银发经济认知</div>
+        <p class="desc">理解银发经济与老年人数字生活问题，明确项目目标/边界/最终交付，完成分组与角色分工。</p>
+        <div class="kv">
+          <div class="k">阶段验收</div><div class="v">能说清：项目服务谁、为什么值得做、最终要交付什么。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 2 -->
+    <div class="stage">
+      <div class="stage-card">
+        <div class="header">
+          <div class="tag">阶段二</div>
+          <div class="date">Week 2–3｜2026.02.14 – 02.27</div>
+        </div>
+        <div class="title">真实问题观察与需求确认</div>
+        <p class="desc">家庭/社区场景观察，记录老年人使用手机、AI、智能设备的真实困难；筛选聚焦并确定 1 个主攻问题方向。</p>
+        <div class="kv">
+          <div class="k">阶段产出</div><div class="v">真实问题清单 + 1 个主攻方向（含“不做清单”）。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 3 -->
+    <div class="stage">
+      <div class="stage-card">
+        <div class="header">
+          <div class="tag">阶段三</div>
+          <div class="date">Week 4｜2026.02.28 – 03.06</div>
+        </div>
+        <div class="title">AI 银发服务方案设计</div>
+        <p class="desc">把问题转成可执行、可教学、可服务的方案：服务范围、结构与整体流程；明确阶段四重点打磨方向。</p>
+        <div class="kv">
+          <div class="k">阶段验收</div><div class="v">方案清晰聚焦，且在周期与学生能力范围内可完成。</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="sep"/>
+
+    <!-- Stage 4 with nested weeks -->
+    <div class="stage">
+      <div class="stage-card">
+        <div class="header">
+          <div class="tag">阶段四（核心）</div>
+          <div class="date">Week 5–8｜2026.03.07 – 04.03（约 3–4 周）</div>
+        </div>
+        <div class="title">银发人群 AI 培训服务打磨与实施</div>
+        <p class="desc">
+          将服务方案打磨成“能教会老年人”的培训与服务体系：重构内容、成型流程、内部试讲、真实交付、反馈沉淀。
+        </p>
+        <div class="kv">
+          <div class="k">阶段验收</div><div class="v">完成真实教学；形成可复用流程；获得真实反馈（非自评）。</div>
+        </div>
+
+        <div class="subweeks">
+          <div class="subweek">
+            <div class="subcard">
+              <div class="subhead">
+                <div class="subtag">Week 5</div>
+                <div class="subdate">2026.03.07 – 03.13</div>
+              </div>
+              <div class="subtitle2">内容聚焦 & 老年人视角重构</div>
+              <p class="subdesc">从资源池确定 2–3 个重点方向；把“学生会用”改写成“老人听得懂、愿意学”的教学逻辑与顺序。</p>
+              <div class="subkv">
+                <div class="k">本周产出</div><div class="v">老年人友好型培训结构草稿（含边界：教什么/不教什么）。</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="subweek">
+            <div class="subcard">
+              <div class="subhead">
+                <div class="subtag">Week 6</div>
+                <div class="subdate">2026.03.14 – 03.20</div>
+              </div>
+              <div class="subtitle2">流程成型 & 材料准备</div>
+              <p class="subdesc">把结构落到可执行流程：教学顺序、关键节点、时长控制；准备示例/模板/演示素材，确保可直接开讲。</p>
+              <div class="subkv">
+                <div class="k">本周产出</div><div class="v">可执行教学流程稿 + 材料清单（示例/模板/演示）。</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="subweek">
+            <div class="subcard">
+              <div class="subhead">
+                <div class="subtag">Week 7</div>
+                <div class="subdate">2026.03.21 – 03.27</div>
+              </div>
+              <div class="subtitle2">内部试讲 & 内容优化</div>
+              <p class="subdesc">模拟教学/试讲，暴露“听不懂、太复杂、卡点多”的内容；删减、重排与改讲法，形成更易学版本。</p>
+              <div class="subkv">
+                <div class="k">本周产出</div><div class="v">优化后的教学流程（可进入真实教学）+ 试讲问题与改动记录。</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="subweek">
+            <div class="subcard">
+              <div class="subhead">
+                <div class="subtag">Week 8</div>
+                <div class="subdate">2026.03.28 – 04.03</div>
+              </div>
+              <div class="subtitle2">真实教学交付 & 反馈沉淀</div>
+              <p class="subdesc">至少完成 1 次线上/线下真实教学；收集反馈，沉淀可复用流程与改进建议，为阶段五“收口”提供依据。</p>
+              <div class="subkv">
+                <div class="k">本周产出</div><div class="v">教学记录 + 老年人真实反馈 + 优化建议清单。</div>
+              </div>
+              <div class="small" style="margin-top:8px;">
+                资源池覆盖：AI基础/简介、文生图/绘画、短视频模板、老照片修复/数字相册、回忆录、旅游攻略、健康管理（非医疗）、智能家居体验等。
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="sep"/>
+
+    <!-- Stage 5 with nested weeks -->
+    <div class="stage">
+      <div class="stage-card">
+        <div class="header">
+          <div class="tag">阶段五</div>
+          <div class="date">Week 9–11｜2026.04.04 – 04.18（约 2–3 周）</div>
+        </div>
+        <div class="title">AI 银发服务成果升级（产品 / 智能体）</div>
+        <p class="desc">基于阶段四真实反馈，收口选定 1 条成果主线，并构建/稳定化可演示原型（产品、智能体或服务原型）。</p>
+        <div class="kv">
+          <div class="k">阶段验收</div><div class="v">来源明确（来自真实服务）；聚焦单一价值点；稳定可演示且可讲述。</div>
+        </div>
+
+        <div class="subweeks">
+          <div class="subweek">
+            <div class="subcard">
+              <div class="subhead">
+                <div class="subtag">Week 9</div>
+                <div class="subdate">2026.04.04 – 04.10</div>
+              </div>
+              <div class="subtitle2">服务方向收口（选定成果主线）</div>
+              <p class="subdesc">回顾阶段四已实施内容与反馈，正式选定 1 个最有价值服务方向作为成果主线；明确为何选它。</p>
+              <div class="subkv">
+                <div class="k">本周产出</div><div class="v">成果主线确认（高价值场景 + 单一核心问题定义）。</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="subweek">
+            <div class="subcard">
+              <div class="subhead">
+                <div class="subtag">Week 10</div>
+                <div class="subdate">2026.04.11 – 04.17</div>
+              </div>
+              <div class="subtitle2">原型构建（产品 / 智能体 / 服务原型）</div>
+              <p class="subdesc">围绕主线构建可演示原型；强调“能跑通、能复现、能讲清”。</p>
+              <div class="subkv">
+                <div class="k">本周产出</div><div class="v">可演示Demo + 使用场景与功能说明初稿。</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="subweek">
+            <div class="subcard">
+              <div class="subhead">
+                <div class="subtag">Week 11（收口）</div>
+                <div class="subdate">2026.04.18</div>
+              </div>
+              <div class="subtitle2">稳定化 & 讲述材料完善</div>
+              <p class="subdesc">对原型做稳定化与演示脚本打磨：确保演示顺畅、逻辑清晰、说明文档可对外使用。</p>
+              <div class="subkv">
+                <div class="k">本周产出</div><div class="v">稳定演示版本 + 完整讲述要点与对外说明文档。</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Stage 6 -->
+    <div class="stage">
+      <div class="stage-card">
+        <div class="header">
+          <div class="tag">阶段六</div>
+          <div class="date">Week 12｜2026.04.19 – 04.25</div>
+        </div>
+        <div class="title">成果展示与项目结项</div>
+        <p class="desc">整理项目全过程，制作展示材料与路演讲述，完成结营发布：PPT + Demo + 项目成果证明。</p>
+        <div class="kv">
+          <div class="k">最终验收</div><div class="v">完整跑通项目；表达清晰；形成可复盘、可迁移的成果。</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
